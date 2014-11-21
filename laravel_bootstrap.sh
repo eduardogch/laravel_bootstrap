@@ -22,6 +22,9 @@ alias vm-ssh='ssh vagrant@127.0.0.1 -p 2222'
 composer global require "laravel/installer=~1.1"
 
 #Crear una VM de vagrant
+
+ssh-keygen -t rsa -C "eduardo@homestead"
+
 vagrant box add laravel/homestead
 cd ~/git
 git clone https://github.com/laravel/homestead.git Homestead
@@ -38,3 +41,6 @@ http://www.sitepoint.com/6-reasons-move-laravel-homestead/
 
 #Config xdebug with PHPStorm and Vagrant
 http://www.sitepoint.com/install-xdebug-phpstorm-vagrant/
+
+#Install plugins in PHPStorm
+Live edit, Angular, Color IDE
