@@ -11,12 +11,17 @@
 sudo apt-get -y update && sudo apt-get -y upgrade
 sudo apt-get -y install php5-cli nfs-common nfs-kernel-server
 
+#Install Vagrant
+wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.5_x86_64.deb
+sudo chmod +x vagrant_1.6.5_x86_64.deb
+sudo dpkg -i vagrant_1.6.5_x86_64.deb
+
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
 gedit ~/.bashrc
 
-#Agregar en el Path de ubuntu
+#Change User's Ubuntu Path
 #######################################
 export PATH=/opt/lampp/bin:~/.composer/vendor/bin:$PATH
 alias pozole='ssh pozole@pozole.noip.me'
@@ -26,7 +31,6 @@ alias vm='ssh vagrant@127.0.0.1 -p 2222'
 composer global require "laravel/installer=~1.1"
 
 #Create a Laravel starter site and Vagrant VM
-
 cd ~/git
 git clone git://github.com/andrewelkins/Laravel-4-Bootstrap-Starter-Site.git laravelstarter
 
