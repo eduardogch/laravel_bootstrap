@@ -1,0 +1,41 @@
+# Instalar este Software
+xampp
+git for windows
+composer for windows
+vagrant
+virtualbox
+phpStorm
+
+# Checar estos comandos en la consola
+php -v
+composer -V
+
+#Descargar Homestead VM
+vagrant box add laravel/homestead
+composer global require "laravel/homestead=~2.0"
+
+# agregar al System Path
+%appdata%\Composer\vendor\bin
+
+# Crear config de la VM
+homestead init
+
+# Cambiar config de Homestead.yml
+notepad C:\Users\Eduardo\.homestead\Homestead.yaml
+
+# comando en Git Bash
+ssh-keygen
+
+# Cambiar hosts
+notepad C:\Windows\System32\drivers\etc\hosts
+
+192.168.10.10  taxicontrol.dev
+192.168.10.10  starterlaravel.dev
+
+# Iniciar Homestead
+cd C:\Users\Eduardo\AppData\Roaming\Composer\vendor\laravel\homestead\
+vagrant up
+
+# Update VM
+cd C:\Users\Eduardo\AppData\Roaming\Composer\vendor\laravel\homestead\
+vagrant provision

@@ -16,52 +16,75 @@ wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.5_x86_64.deb
 sudo chmod +x vagrant_1.6.5_x86_64.deb
 sudo dpkg -i vagrant_1.6.5_x86_64.deb
 
+#Install composer
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 
-gedit ~/.bashrc
 
 #Change User's Ubuntu Path
+gedit ~/.bashrc
 #######################################
 export PATH=/opt/lampp/bin:~/.composer/vendor/bin:$PATH
 alias pozole='ssh pozole@pozole.noip.me'
-alias vm='ssh vagrant@127.0.0.1 -p 2222'
+alias vm='homestead ssh'
 #######################################
 
-composer global require "laravel/installer=~1.1"
 
-#Create a Laravel starter site and Vagrant VM
-cd ~/git
-git clone git://github.com/andrewelkins/Laravel-4-Bootstrap-Starter-Site.git laravelstarter
+#Install Vagrant Box for Laravel
+vagrant box add laravel/homestead
+composer global require "laravel/homestead=~2.0"
 
-#Change in VagrantFile
+#Init homestead
+homestead init
+
+
+#Change for this Values
+nano ~/.homestead/Homestead.yaml
 #######################################
-#Change this value to admin MySQL with HeidiSQL *Only for dev
-mysql_enable_remote   = "true" 
+---
+ip: "192.168.10.10"
+memory: 2048
+cpus: 1
 
-laravel_root_folder   = "/vagrant"
-#######################################
+authorize: ~/.ssh/id_rsa.pub
 
-# Run the Virtual Machine to start the web app
-vagrant up
+keys:
+    - ~/.ssh/id_rsa
 
-# Update and Install the VM
-vagrant provision
+folders:
+    - map: ~/git
+      to: /home/vagrant/Code
 
-# Alias to have a SSH conection with the VM
-vm
+sites:
+    - map: taxicontrol.dev
+      to: /home/vagrant/Code/taxi-control/public
+    - map: starterlaravel.dev
+      to: /home/vagrant/Code/starterlaravel/public
 
-# Run commands in Vagrant machine
-php artisan migrate
-php artisan db:seed
-php artisan key:generate
+databases:
+    - taxicontrol
+    - laravel
 
-chmod -R 775 /vagrant/app/storage
+variables:
+    - key: APP_ENV
+      value: local
+#########################################
 
-# Reinstall VM Vagrant
-vagrant destroy -f && vagrant up
 
-# Reinstall SSH keys
+
+#Change for this Values
+nano ~/.homestead/after.sh
+#########################################
+# Taxi Control App
+echo "Execute Taxi Control initial commands"
+su vagrant -c /home/vagrant/Code/taxi-control/local-script.sh
+#########################################
+
+
+#Refresh settings VM
+homestead up --provision
+
+#Reinstall SSH keys
 rm -R ~/.ssh && ssh-keygen -t rsa -C $USER"@localhost"
 
 #Change Nginx  config
